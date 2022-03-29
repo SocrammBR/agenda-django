@@ -21,7 +21,8 @@
 {% else %}
   <p>
     Você ja fez login como {{ user }},
-    <a href="{{url 'logout'}}">clique aqui</a> para sair da conta, ou <a href="{{url 'index'}}">clique aqui</a> para voltar para a tela inicial
+    <a href="{%url 'logout'%}">clique aqui</a> para sair da conta
+    <a href="{%url 'dashboard'%}">clique aqui</a> para ir para a dashboard
   </p>
 {% endif %}
 {% endblock conteudo %}

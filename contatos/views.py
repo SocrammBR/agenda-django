@@ -14,11 +14,13 @@ def index(request):
   contatos = Contato.objects.order_by('-id').filter(mostrar=True)
   paginator = Paginator(contatos, 25)
   
-  
   page = request.GET.get('p') 
   contatos = paginator.get_page(page)
+  
+  user_id = request.user.id
   return render(request, 'contatos/index.html', {
-    'contatos': contatos
+    'contatos': contatos,
+    'user_id': user_id,
   })
   
   
@@ -28,6 +30,9 @@ def ver_contato(request, contato_id):
   contato = get_object_or_404(Contato, id=contato_id)
   
   if not contato.mostrar:
+    raise Http404()
+  
+  if contato.dono_id != request.user.id:
     raise Http404()
   
   return render(request, 'contatos/ver_contato.html', {
@@ -53,6 +58,9 @@ def busca(request):
   
   page = request.GET.get('p') 
   contatos = paginator.get_page(page)
+  
+  user_id = request.user.id
   return render(request, 'contatos/index.html', {
-    'contatos': contatos
+    'contatos': contatos,
+    'user_id': user_id,
   })

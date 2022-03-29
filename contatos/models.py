@@ -1,7 +1,12 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
+from crequest.middleware import CrequestMiddleware
+# from rest_framework.request import Request
+user = CrequestMiddleware.get_request(User.id)
 
 # Create your models here.
+
 class Categoria(models.Model):
   nome = models.CharField(max_length=255)
   
@@ -19,6 +24,8 @@ class Contato(models.Model):
   categoria = models.ForeignKey(Categoria, on_delete=models.DO_NOTHING)
   mostrar = models.BooleanField(default=True)
   foto = models.ImageField(blank=True, upload_to='fotos/%Y/%m/')
+  dono = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+  
   
   def __str__(self):
     return self.nome

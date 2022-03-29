@@ -2,7 +2,12 @@
 
 {% block conteudo %}
   <h1 class="mt-5">Minha agenda</h1>
-
+  {% if not user.is_authenticated %}
+  <h3>
+    Você não está Logado
+    <a href={%url 'login'%}>clique aqui</a> para fazer login, ou <a href={%url 'cadastro'%}>aqui</a> para se cadastrar
+  </h3>
+  {% else %}
   <table class="table">
     <thead>
       <tr>
@@ -16,15 +21,17 @@
     <tbody>
       {% for contato in contatos  %}
         {% if contato.mostrar %}
-          <tr>
-            <td>{{ contato.id }}</td>
-            <td>
-              <a href="{% url 'ver_contato' contato.id %}">{{ contato.nome }}</a>
-            </td>
-            <td>{{ contato.sobrenome }}</td>
-            <td>{{ contato.telefone }}</td>
-            <td>{{ contato.categoria }}</td>
-          </tr>
+          {% if contato.dono_id == user_id %}
+            <tr>
+              <td>{{ contato.id }}</td>
+              <td>
+                <a href="{% url 'ver_contato' contato.id %}">{{ contato.nome }}</a>
+              </td>
+              <td>{{ contato.sobrenome }}</td>
+              <td>{{ contato.telefone }}</td>
+              <td>{{ contato.categoria }}</td>
+            </tr>
+            {% endif %}
         {% endif %}
       {% endfor %}
     </tbody>
@@ -32,12 +39,13 @@
   <nav aria-label="Page navigation example">
     <ul class="pagination">
       {% for pagina in contatos.paginator.page_range %}
-        {% if contatos.number == pagina %}
-          <li class="page-item active"><a class="page-link" href="?p={{ pagina }}&termo={{ request.GET.termo }}">{{ pagina }}</a></li>
+      {% if contatos.number == pagina %}
+      <li class="page-item active"><a class="page-link" href="?p={{ pagina }}&termo={{ request.GET.termo }}">{{ pagina }}</a></li>
         {% else %}
           <li class="page-item"><a class="page-link" href="?p={{ pagina }}&termo={{ request.GET.termo }}">{{ pagina }}</a></li>
         {% endif %}
-      {% endfor %}
+        {% endfor %}
     </ul>
   </nav>
-{% endblock conteudo %}
+  {% endif %}
+  {% endblock conteudo %}

@@ -21,6 +21,7 @@ def login(request):
   else:
     auth.login(request, user)
     messages.success(request, 'Logado com sucesso')
+    return redirect(to='dashboard')
 
 def logout(request):
   auth.logout(request)
@@ -82,11 +83,17 @@ def dashboard(request):
   
   form = FormContato(request.POST, request.FILES)
   
+  
   if not form.is_valid():
     messages.error(request, 'Erro ao enviar')
     form = FormContato(request.POST)
     return render(request, 'accounts/dashboard.html', {'form': form})
   
-  form.save()
+  obj = form.save(commit=False)
+  
+  obj.dono_id = request.user.id
+  print(obj.dono_id)
+  obj.save()
+  
   messages.success(request, 'Cadastro realizado com sucesso')
   return redirect('dashboard')
