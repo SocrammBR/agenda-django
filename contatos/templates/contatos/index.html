@@ -8,6 +8,7 @@
     <a href={%url 'login'%}>clique aqui</a> para fazer login, ou <a href={%url 'cadastro'%}>aqui</a> para se cadastrar
   </h3>
   {% else %}
+  {% if contatos %}
   <table class="table">
     <thead>
       <tr>
@@ -31,9 +32,15 @@
               <td>{{ contato.telefone }}</td>
               <td>{{ contato.categoria }}</td>
             </tr>
-            {% endif %}
+          {% endif %}
         {% endif %}
       {% endfor %}
+  {% else %}
+  <br></br>
+  <h4>
+    Você não tem contatos para mostrar, <a href={%url dashboard%}>clique aqui</a> para ir para a Dashboard e cadastrar contatos
+  </h4>
+  {% endif %}
     </tbody>
   </table>
   <nav aria-label="Page navigation example">
