@@ -8,7 +8,7 @@ user = CrequestMiddleware.get_request(User.id)
 # Create your models here.
 
 class Categoria(models.Model):
-  nome = models.CharField(max_length=255)
+  nome = models.CharField(max_length=250)
   
   def __str__(self):
     return self.nome
