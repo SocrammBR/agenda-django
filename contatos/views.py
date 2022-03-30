@@ -11,13 +11,20 @@ from django.db.models.functions import Concat
 
 def index(request):
   
-  contatos = Contato.objects.order_by('-id').filter(mostrar=True)
+  user_id = request.user.id
+  contatos = Contato.objects.order_by('-id').filter(mostrar=True, dono_id=user_id)
   paginator = Paginator(contatos, 25)
-  
+  if len(list(contatos)) == 0:
+    contatos = None
+    return render(request, 'contatos/index.html', {
+    'contatos': contatos,
+    'user_id': user_id,
+  })
+    
   page = request.GET.get('p') 
   contatos = paginator.get_page(page)
   
-  user_id = request.user.id
+  
   return render(request, 'contatos/index.html', {
     'contatos': contatos,
     'user_id': user_id,
@@ -35,9 +42,11 @@ def ver_contato(request, contato_id):
   if contato.dono_id != request.user.id:
     raise Http404()
   
+  
   return render(request, 'contatos/ver_contato.html', {
     'contato': contato
   })
+  
 
 
 def busca(request):
